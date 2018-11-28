@@ -6,13 +6,13 @@ import (
 )
 
 func main() {
-	//basicSelect()
+	basicSelect()
 	fmt.Println("---")
 
-	//defaultCase()
+	defaultCase()
 	fmt.Println("---")
 
-	//defaultAndDeadlock()
+	defaultAndDeadlock()
 	fmt.Println("---")
 
 	randomSelection()
