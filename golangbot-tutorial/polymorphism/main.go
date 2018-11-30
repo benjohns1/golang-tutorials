@@ -2,16 +2,19 @@ package main
 
 import "fmt"
 
+// Income interface
 type Income interface {
 	calculate() int
 	source() string
 }
 
+// FixedBilling struct
 type FixedBilling struct {
 	projectName  string
 	biddedAmount int
 }
 
+// TimeAndMaterial struct
 type TimeAndMaterial struct {
 	projectName string
 	noOfHours   int
@@ -34,6 +37,7 @@ func (tm TimeAndMaterial) source() string {
 	return tm.projectName
 }
 
+// Advertisement struct
 type Advertisement struct {
 	adName     string
 	CPC        int
