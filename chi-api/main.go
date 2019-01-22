@@ -4,7 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"golang-tutorials/chi-api/todo"
+	apimiddle "github.com/benjohns1/golang-tutorials/chi-api/middleware"
+	"github.com/benjohns1/golang-tutorials/chi-api/todo"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -22,7 +23,7 @@ func routes() *chi.Mux {
 	)
 
 	router.Route("/v1", func(r chi.Router) {
-		r.Mount("/api/todo", todo.Routes())
+		r.Mount("/api/todo", todo.Routes(chi.NewRouter(), apimiddle.NewResponseFormatter(render.JSON)))
 	})
 
 	return router

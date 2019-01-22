@@ -4,44 +4,45 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi"
-	"github.com/go-chi/render"
 )
 
-type Todo struct {
+type todo struct {
 	Slug  string `json:"slug"`
 	Title string `json:"title"`
 	Body  string `json:"body"`
 }
 
-func GetATodo(w http.ResponseWriter, r *http.Request) {
+type response = interface{}
+
+func getTodo(r *http.Request) response {
 	todoID := chi.URLParam(r, "todoID")
-	todos := Todo{
+	todos := todo{
 		Slug:  todoID,
 		Title: "Hello world",
 		Body:  "Heloo world from planet earth",
 	}
-	render.JSON(w, r, todos) // A chi router helper for serializing and returning json
+	return todos
 }
 
-func DeleteTodo(w http.ResponseWriter, r *http.Request) {
+func deleteTodo(r *http.Request) response {
 	response := make(map[string]string)
 	response["message"] = "Deleted TODO successfully"
-	render.JSON(w, r, response) // Return some demo response
+	return response
 }
 
-func CreateTodo(w http.ResponseWriter, r *http.Request) {
+func createTodo(r *http.Request) response {
 	response := make(map[string]string)
 	response["message"] = "Created TODO successfully"
-	render.JSON(w, r, response) // Return some demo response
+	return response
 }
 
-func GetAllTodos(w http.ResponseWriter, r *http.Request) {
-	todos := []Todo{
+func getAllTodos(r *http.Request) response {
+	todos := []todo{
 		{
 			Slug:  "slug",
 			Title: "Hello world",
 			Body:  "Heloo world from planet earth",
 		},
 	}
-	render.JSON(w, r, todos) // A chi router helper for serializing and returning json
+	return todos
 }
