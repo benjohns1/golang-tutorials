@@ -7,11 +7,13 @@ import (
 	"github.com/benjohns1/golang-tutorials/chi-api/core"
 )
 
+// UnitOfWork concrete implementation of a unit of work
 type UnitOfWork struct {
 	todoRepo *TodoRepository
 	conn     *sql.DB
 }
 
+// NewUnitOfWork Constructs a new unit of work object from a database connection
 func NewUnitOfWork(conn *sql.DB) UnitOfWork {
 	return UnitOfWork{
 		todoRepo: &TodoRepository{conn},
@@ -19,10 +21,12 @@ func NewUnitOfWork(conn *sql.DB) UnitOfWork {
 	}
 }
 
+// Complete applies all in-memory changes to the database
 func (u UnitOfWork) Complete() error {
-	return fmt.Errorf("NOT IMPLEMENTED Unable to complete")
+	panic(fmt.Errorf("NOT IMPLEMENTED"))
 }
 
+// Todo provides access to TodoRepository
 func (u UnitOfWork) Todo() core.TodoRepository {
 	return u.todoRepo
 }
