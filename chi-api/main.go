@@ -6,13 +6,10 @@ import (
 	"log"
 	"net/http"
 
-	apimiddle "github.com/benjohns1/golang-tutorials/chi-api/middleware"
-	"github.com/benjohns1/golang-tutorials/chi-api/persistence"
-	"github.com/benjohns1/golang-tutorials/chi-api/todo"
+	"github.com/benjohns1/golang-tutorials/chi-api/persistence/postgresdb"
+	"github.com/benjohns1/golang-tutorials/chi-api/presentation/restapi"
 
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/render"
 	_ "github.com/lib/pq"
 )
 
@@ -22,24 +19,9 @@ const (
 	dbName     = "postgres"
 )
 
-func routes(unitOfWork todo.UnitOfWork) *chi.Mux {
-	router := chi.NewRouter()
-	router.Use(
-		render.SetContentType(render.ContentTypeJSON),
-		middleware.Logger,
-		middleware.DefaultCompress,
-		middleware.RedirectSlashes,
-		middleware.Recoverer,
-	)
-
-	router.Route("/v1", func(r chi.Router) {
-		r.Mount("/api/todo", todo.Routes(unitOfWork, chi.NewRouter(), apimiddle.NewResponseFormatter(render.JSON)))
-	})
-
-	return router
-}
-
 func main() {
+
+	// Persistence (PostgreSQL DB)
 	dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", dbUser, dbPassword, dbName)
 	db, err := sql.Open("postgres", dbinfo)
 	if err != nil {
@@ -50,9 +32,10 @@ func main() {
 	if pingErr != nil {
 		panic(pingErr)
 	}
-	todoUnitOfWork := persistence.NewTodoUnitOfWork(db)
+	todoUnitOfWork := postgresdb.NewUnitOfWork(db)
 
-	router := routes(todoUnitOfWork)
+	// Presentation (REST API)
+	router := restapi.Routes(todoUnitOfWork)
 
 	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
 		log.Printf("%s %s\n", method, route)

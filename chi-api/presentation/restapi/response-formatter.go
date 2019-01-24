@@ -1,4 +1,4 @@
-package middleware
+package restapi
 
 import (
 	"net/http"
