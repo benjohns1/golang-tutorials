@@ -88,7 +88,7 @@ func (t *TodoRepository) GetAll() ([]*core.Todo, error) {
 		return nil, fmt.Errorf("Error querying database: %v", err)
 	}
 
-	var todos []*core.Todo
+	todos := []*core.Todo{}
 	for rows.Next() {
 		var todo core.Todo
 		err = rows.Scan(&todo.Slug, &todo.Title, &todo.Body)
