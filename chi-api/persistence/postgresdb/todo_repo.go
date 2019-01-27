@@ -54,7 +54,7 @@ func (t *TodoRepository) Remove(todoID int) error {
 // Get retrieves a single Todo
 func (t *TodoRepository) Get(todoID int) (*core.Todo, error) {
 
-	query, err := t.conn.Prepare("SELECT slug, title, body FROM todo WHERE id=$1")
+	query, err := t.conn.Prepare("SELECT id, slug, title, body FROM todo WHERE id=$1")
 	if err != nil {
 		return nil, fmt.Errorf("Error compiling database query: %v", err)
 	}
@@ -65,7 +65,7 @@ func (t *TodoRepository) Get(todoID int) (*core.Todo, error) {
 
 	var todo core.Todo
 	if rows.Next() {
-		err = rows.Scan(&todo.Slug, &todo.Title, &todo.Body)
+		err = rows.Scan(&todo.ID, &todo.Slug, &todo.Title, &todo.Body)
 		if err != nil {
 			return nil, fmt.Errorf("Error parsing database data: %v", err)
 		}
@@ -79,7 +79,7 @@ func (t *TodoRepository) Get(todoID int) (*core.Todo, error) {
 // GetAll gets all Todos
 func (t *TodoRepository) GetAll() ([]*core.Todo, error) {
 
-	query, err := t.conn.Prepare("SELECT slug, title, body FROM todo")
+	query, err := t.conn.Prepare("SELECT id, slug, title, body FROM todo")
 	if err != nil {
 		return nil, fmt.Errorf("Error compiling database query: %v", err)
 	}
@@ -91,7 +91,7 @@ func (t *TodoRepository) GetAll() ([]*core.Todo, error) {
 	todos := []*core.Todo{}
 	for rows.Next() {
 		var todo core.Todo
-		err = rows.Scan(&todo.Slug, &todo.Title, &todo.Body)
+		err = rows.Scan(&todo.ID, &todo.Slug, &todo.Title, &todo.Body)
 		if err != nil {
 			return nil, fmt.Errorf("Error parsing database data: %v", err)
 		}
