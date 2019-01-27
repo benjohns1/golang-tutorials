@@ -1,2 +1,3 @@
 *.exe
 chi-api
+!chi-api/
